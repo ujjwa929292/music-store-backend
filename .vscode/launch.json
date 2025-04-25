@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ThemusicstroreAppApplication<themusicstroreapp>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.musicstrore.themusicstroreapp.ThemusicstroreAppApplication",
+            "projectName": "themusicstroreapp",
+            "args": "",
+            "env": {
+                "DB_HOST": "localhost",
+                "DB_PORT": "5432",
+                "DB_NAME": "musicstroredb",
+                "DB_USER": "user",
+                "DB_PASSWORD": "P@ssw0rd",
+                "ALLOWED_ORIGINS": "http://localhost:3000"
+            },
+        }
+    ]
+}

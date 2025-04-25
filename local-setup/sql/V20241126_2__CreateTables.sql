@@ -1,0 +1,86 @@
+CREATE TABLE IF NOT EXISTS Category (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    shortdescription TEXT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS File (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    file_type VARCHAR(255),
+    alt TEXT,
+    thumbnailurl VARCHAR(255),
+    productid UUID,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Album (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    shortdescription TEXT,
+    url VARCHAR(255),
+    description TEXT,
+    headline VARCHAR(255),
+    headlinedescription VARCHAR(255),
+    price VARCHAR(1000),
+    maincategory_id UUID,
+    fileids UUID[],
+    artist VARCHAR(255),
+    release_date DATE,
+    label VARCHAR(255),
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (maincategory_id) REFERENCES Category(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS Review (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    authorname VARCHAR(255) NOT NULL,
+    rating INT NOT NULL,
+    title VARCHAR(255),
+    description TEXT,
+    productid UUID NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (productid) REFERENCES Album(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Artist (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    bio TEXT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Track (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    duration INT NOT NULL,
+    album_id UUID NOT NULL,
+    artist_id UUID,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (album_id) REFERENCES Album(id) ON DELETE CASCADE,
+    FOREIGN KEY (artist_id) REFERENCES Artist(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS Playlist (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS PlaylistTrack (
+    playlist_id UUID NOT NULL,
+    track_id UUID NOT NULL,
+    PRIMARY KEY (playlist_id, track_id),
+    FOREIGN KEY (playlist_id) REFERENCES Playlist(id) ON DELETE CASCADE,
+    FOREIGN KEY (track_id) REFERENCES Track(id) ON DELETE CASCADE
+);
